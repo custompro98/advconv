@@ -21,7 +21,7 @@ THE SOFTWARE.
 */
 package main
 
-import "github.com/custompro98/r20toeplus/cmd"
+import "github.com/custompro98/r20conv/cmd"
 
 func main() {
 	cmd.Execute()

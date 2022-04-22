@@ -4,10 +4,12 @@ import (
 	"encoding/json"
 )
 
+// Adventure encapsulates the entire adventure object from 5eTools
 type Adventure struct {
 	Sections []Section `json:"data"`
 }
 
+// Section encapsulates each arbitrary section in the Adventure
 type Section struct {
 	Type    string  `json:"type"`
 	Name    string  `json:"name"`
@@ -16,7 +18,7 @@ type Section struct {
 	Entries []Entry `json:"entries"`
 }
 
-// Section Entry
+// Section Entry encapsulates each entry in a Section
 type Entry struct {
 	Type string
 	Id   string
@@ -26,6 +28,9 @@ type Entry struct {
 	Entries []Entry
 }
 
+// EntryJson is a helper struct to parse dynamic Entry formats:
+// A) Edge Branch: { Type, Id, []Entries }
+// B) Leaf Node: String
 type EntryJson struct {
 	Type    string  `json:"type"`
 	Id      string  `json:"id"`

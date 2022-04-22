@@ -37,6 +37,7 @@ type EntryJSON struct {
 	Entries []Entry `json:"entries"`
 }
 
+// Parse turns a JSON string from 5eTools into an @Adventure
 func Parse(s string) (Adventure, error) {
 	var adventure Adventure
 

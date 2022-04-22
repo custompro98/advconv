@@ -28,10 +28,10 @@ type Entry struct {
 	Entries []Entry
 }
 
-// EntryJson is a helper struct to parse dynamic Entry formats:
+// EntryJSON is a helper struct to parse dynamic Entry formats:
 // A) Edge Branch: { Type, Id, []Entries }
 // B) Leaf Node: String
-type EntryJson struct {
+type EntryJSON struct {
 	Type    string  `json:"type"`
 	Id      string  `json:"id"`
 	Entries []Entry `json:"entries"`
@@ -49,8 +49,10 @@ func Parse(s string) (Adventure, error) {
 	return adventure, nil
 }
 
+// UnmarshalJSON is a custom JSON parser to handle the edge branch
+// and leaf node structure of the @Entry // @EntryJSON struct
 func (se *Entry) UnmarshalJSON(data []byte) error {
-	var res EntryJson
+	var res EntryJSON
 
 	if err := json.Unmarshal(data, &res); err != nil {
 		// TODO: this should more intelligently check for the right error type
@@ -69,6 +71,7 @@ func (se *Entry) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
+// isEmpty returns true if the input is empty
 func isEmpty(s string) bool {
 	return s == ""
 }

@@ -9,23 +9,23 @@ import (
 func TestParse(t *testing.T) {
 	tests := []struct {
 		scenario    string
-		input       []byte
+		input       string
 		expected    adventure.Adventure
 		errExpected bool
 	}{
 		{
 			scenario: "An empty input produces an empty adventure",
-			input:    []byte("{}"),
+			input:    "{}",
 			expected: adventure.Adventure{},
 		},
 		{
 			scenario: "The opening data tag is ignored",
-			input:    []byte("{\"data\": []}"),
+			input:    "{\"data\": []}",
 			expected: adventure.Adventure{},
 		},
 		{
 			scenario: "The adventure can be broken up into many named sections",
-			input:    []byte("{\"data\": [{\"type\": \"section\", \"name\": \"Section 1\"},{\"type\": \"section\", \"name\": \"Section 2\"}]}"),
+			input:    "{\"data\": [{\"type\": \"section\", \"name\": \"Section 1\"},{\"type\": \"section\", \"name\": \"Section 2\"}]}",
 			expected: adventure.Adventure{
 				Sections: []adventure.Section{
 					{
@@ -41,7 +41,7 @@ func TestParse(t *testing.T) {
 		},
 		{
 			scenario: "The named sections have types, page numbers, and ids",
-			input:    []byte("{\"data\": [{\"type\": \"section\", \"name\": \"Section 1\", \"page\": 1, \"id\": \"abc123\"}]}"),
+			input:    "{\"data\": [{\"type\": \"section\", \"name\": \"Section 1\", \"page\": 1, \"id\": \"abc123\"}]}",
 			expected: adventure.Adventure{
 				Sections: []adventure.Section{
 					{
@@ -55,7 +55,7 @@ func TestParse(t *testing.T) {
 		},
 		{
 			scenario: "The named sections also have entries which can be strings",
-			input:    []byte("{\"data\": [{\"entries\": [\"Some description\"]}]}"),
+			input:    "{\"data\": [{\"entries\": [\"Some description\"]}]}",
 			expected: adventure.Adventure{
 				Sections: []adventure.Section{
 					{
@@ -71,7 +71,7 @@ func TestParse(t *testing.T) {
 		},
 		{
 			scenario: "The named sections can also have entries which are full objects",
-			input:    []byte("{\"data\": [{\"entries\": [{\"type\": \"entry\", \"entries\": [\"Some description\"]}]}]}"),
+			input:    "{\"data\": [{\"entries\": [{\"type\": \"entry\", \"entries\": [\"Some description\"]}]}]}",
 			expected: adventure.Adventure{
 				Sections: []adventure.Section{
 					{
@@ -94,7 +94,7 @@ func TestParse(t *testing.T) {
 
 	for _, v := range tests {
 		t.Run(v.scenario, func(t *testing.T) {
-			result, err := Parse(v.input)
+			result, err := Parse([]byte(v.input))
 
 			if err != nil && !v.errExpected {
 				t.Error(err)

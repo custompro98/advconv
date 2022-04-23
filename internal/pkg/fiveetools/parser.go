@@ -84,12 +84,14 @@ func (se *Entry) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
+// normalize converts a local Adventure into the uniform Adventure type
 func normalize(a Adventure, t *adventure.Adventure) {
 	for _, v := range a.Sections {
 		normalizeSection(v, &t.Sections)
 	}
 }
 
+// normalizeSection converts a local Section into the uniform Section type
 func normalizeSection(s Section, t *([]adventure.Section)) {
 	sec := adventure.Section{
 		Type: s.Type,
@@ -105,6 +107,8 @@ func normalizeSection(s Section, t *([]adventure.Section)) {
 	*t = append(*t, sec)
 }
 
+// normalizeEntry converts a local Entry into the uniform Entry type
+// this function is called recursively to go down the nested structure of entries
 func normalizeEntry(e Entry, t *([]adventure.Entry)) {
 	fmt.Printf("normalizing entry: id: %v ; value: %v", e.Id, e.Value)
 	ent := adventure.Entry{

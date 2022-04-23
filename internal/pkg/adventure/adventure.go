@@ -23,3 +23,8 @@ type Entry struct {
 	// Entries is only present if Value is not, it's a branch in the tree
 	Entries []Entry
 }
+
+type Formatter interface {
+	Parse([]byte) (Adventure, error)
+	Serialize(Adventure) ([]byte, error)
+}

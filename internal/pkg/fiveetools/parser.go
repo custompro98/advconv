@@ -2,7 +2,6 @@ package fiveetools
 
 import (
 	"encoding/json"
-	"fmt"
 
 	"github.com/custompro98/r20conv/internal/pkg/adventure"
 )
@@ -14,11 +13,11 @@ type Adventure struct {
 
 // Section encapsulates each arbitrary section in the Adventure
 type Section struct {
-	Type    string  `json:"type"`
-	Name    string  `json:"name"`
-	Page    int     `json:"page"`
-	Id      string  `json:"id"`
-	Entries []Entry `json:"entries"`
+	Type    string  `json:"type,omitempty"`
+	Name    string  `json:"name,omitempty"`
+	Page    int     `json:"page,omitempty"`
+	Id      string  `json:"id,omitempty"`
+	Entries []Entry `json:"entries,omitempty"`
 }
 
 // Section Entry encapsulates each entry in a Section
@@ -35,12 +34,12 @@ type Entry struct {
 // A) Edge Branch: { Type, Id, []Entries }
 // B) Leaf Node: String
 type EntryJSON struct {
-	Type    string  `json:"type"`
-	Id      string  `json:"id"`
-	Entries []Entry `json:"entries"`
+	Type    string  `json:"type,omitempty"`
+	Id      string  `json:"id,omitempty"`
+	Entries []Entry `json:"entries,omitempty"`
 }
 
-// Parse turns a JSON string from 5eTools into an @Adventure
+// Parse turns a JSON string from 5eTools into an @adventure.Adventure
 func Parse(b []byte) (adventure.Adventure, error) {
 	var res adventure.Adventure
 	var adv Adventure
@@ -84,44 +83,38 @@ func (se *Entry) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-// normalize converts a local Adventure into the uniform Adventure type
-func normalize(a Adventure, t *adventure.Adventure) {
-	for _, v := range a.Sections {
-		normalizeSection(v, &t.Sections)
+// Serialize turns an @adventure.Adventure into a []byte for writing to a file
+func Serialize(a adventure.Adventure) ([]byte, error) {
+	var res []byte
+	var adv Adventure
+
+	// denormalize into a local Adventure
+	denormalize(a, &adv)
+
+	// Marshal the local Adventure to []byte
+	res, err := json.Marshal(adv)
+
+	if err != nil {
+		// TODO: this should more intelligently check for the right error type
 	}
+
+	return res, nil
 }
 
-// normalizeSection converts a local Section into the uniform Section type
-func normalizeSection(s Section, t *([]adventure.Section)) {
-	sec := adventure.Section{
-		Type: s.Type,
-		Name: s.Name,
-		Page: s.Page,
-		Id:   s.Id,
+// MarshalJSON is a custom JSON parser to handle the edge branch
+// and leaf node structure of the @Entry // @EntryJSON struct
+func (se *Entry) MarshalJSON() ([]byte, error) {
+	if se.Type == "text" {
+		return json.Marshal(se.Value)
 	}
 
-	for _, v := range s.Entries {
-		normalizeEntry(v, &sec.Entries)
+	entryJSON := EntryJSON{
+		Type:    se.Type,
+		Id:      se.Id,
+		Entries: se.Entries,
 	}
 
-	*t = append(*t, sec)
-}
-
-// normalizeEntry converts a local Entry into the uniform Entry type
-// this function is called recursively to go down the nested structure of entries
-func normalizeEntry(e Entry, t *([]adventure.Entry)) {
-	fmt.Printf("normalizing entry: id: %v ; value: %v", e.Id, e.Value)
-	ent := adventure.Entry{
-		Type:  e.Type,
-		Id:    e.Id,
-		Value: e.Value,
-	}
-
-	for _, v := range e.Entries {
-		normalizeEntry(v, &ent.Entries)
-	}
-
-	*t = append(*t, ent)
+	return json.Marshal(entryJSON)
 }
 
 // isEmpty returns true if the input is empty

@@ -1,6 +1,7 @@
 package fiveetools
 
 import (
+	"strings"
 	"testing"
 
 	"github.com/custompro98/r20conv/internal/pkg/adventure"
@@ -167,7 +168,7 @@ func TestParse(t *testing.T) {
 	}
 }
 
-/* func Test_Serialize(t *testing.T) {
+func Test_Serialize(t *testing.T) {
 	tests := []struct {
 		scenario    string
 		input       adventure.Adventure
@@ -181,20 +182,92 @@ func TestParse(t *testing.T) {
 			},
 			expected: "{\"data\": []}",
 		},
+		{
+			scenario: "The adventure's sections are formatted",
+			input: adventure.Adventure{
+				Sections: []adventure.Section{
+					{
+						Type: "section",
+						Name: "Section 1",
+					},
+					{
+						Type: "section",
+						Name: "Section 2",
+					},
+				},
+			},
+			expected: "{\"data\": [{\"type\": \"section\", \"name\": \"Section 1\"},{\"type\": \"section\", \"name\": \"Section 2\"}]}",
+		},
+		{
+			scenario: "The named sections have types, page numbers, and ids",
+			input: adventure.Adventure{
+				Sections: []adventure.Section{
+					{
+						Type: "section",
+						Name: "Section 1",
+						Page: 1,
+						Id:   "abc123",
+					},
+				},
+			},
+			expected: "{\"data\": [{\"type\": \"section\", \"name\": \"Section 1\", \"page\": 1, \"id\": \"abc123\"}]}",
+		},
+		{
+			scenario: "The named sections also have entries which can be strings",
+			input: adventure.Adventure{
+				Sections: []adventure.Section{
+					{
+						Entries: []adventure.Entry{
+							{
+								Type:  "text",
+								Value: "Some description",
+							},
+						},
+					},
+				},
+			},
+			expected: "{\"data\": [{\"entries\": [\"Some description\"]}]}",
+		},
+		{
+			scenario: "The named sections can also have entries which are full objects",
+			input: adventure.Adventure{
+				Sections: []adventure.Section{
+					{
+						Entries: []adventure.Entry{
+							{
+								Type: "entry",
+								Entries: []adventure.Entry{
+									{
+										Type:  "text",
+										Value: "Some description",
+									},
+								},
+							},
+						},
+					},
+				},
+			},
+			expected: "{\"data\": [{\"entries\": [{\"type\": \"entry\", \"entries\": [\"Some description\"]}]}]}",
+		},
 	}
 
 	for _, v := range tests {
 		t.Run(v.scenario, func(t *testing.T) {
-			result, err := Serialize(v.input)
+			out, err := Serialize(v.input)
 
 			if err != nil && !v.errExpected {
 				t.Error(err)
 			}
 
-			if result != strings.ReplaceAll(v.expected, " ", "") {
+			result := string(out)
+
+			if squish(result) != squish(v.expected) {
 				t.Errorf("result expected %v, got %v", v.expected, result)
 			}
 		})
 	}
+}
 
-} */
+func squish(s string) string {
+	return strings.ReplaceAll(string(s), " ", "")
+}

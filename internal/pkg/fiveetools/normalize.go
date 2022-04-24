@@ -1,7 +1,7 @@
 package fiveetools
 
 import (
-	"github.com/custompro98/r20conv/internal/pkg/adventure"
+	"github.com/custompro98/advconv/internal/pkg/adventure"
 )
 
 // normalize converts a local @Adventure into the uniform @adventure.Adventure type

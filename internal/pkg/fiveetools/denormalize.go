@@ -1,7 +1,7 @@
 package fiveetools
 
 import (
-	"github.com/custompro98/r20conv/internal/pkg/adventure"
+	"github.com/custompro98/advconv/internal/pkg/adventure"
 )
 
 // denormalize converts an @adventure.Adventure into the local @Adventure type

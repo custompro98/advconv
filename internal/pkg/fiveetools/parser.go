@@ -3,7 +3,7 @@ package fiveetools
 import (
 	"encoding/json"
 
-	"github.com/custompro98/r20conv/internal/pkg/adventure"
+	"github.com/custompro98/advconv/internal/pkg/adventure"
 )
 
 // Adventure encapsulates the entire adventure object from 5eTools

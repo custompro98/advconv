@@ -1,4 +1,4 @@
-module github.com/custompro98/r20conv
+module github.com/custompro98/advconv
 
 go 1.18
 

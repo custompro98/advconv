@@ -4,7 +4,7 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/custompro98/r20conv/internal/pkg/adventure"
+	"github.com/custompro98/advconv/internal/pkg/adventure"
 )
 
 func TestParse(t *testing.T) {

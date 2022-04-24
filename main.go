@@ -21,7 +21,7 @@ THE SOFTWARE.
 */
 package main
 
-import "github.com/custompro98/r20conv/cmd"
+import "github.com/custompro98/advconv/cmd"
 
 func main() {
 	cmd.Execute()

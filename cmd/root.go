@@ -29,14 +29,11 @@ import (
 
 // rootCmd represents the base command when called without any subcommands
 var rootCmd = &cobra.Command{
-	Use:   "r20toeplus",
-	Short: "Convert Roll20 json files to the Encounter+ Module format",
-	Long: `A longer description that spans multiple lines and likely contains
-examples and usage of using your application. For example:
+	Use:   "advconv",
+	Short: "Convert one format of adventure json to another format",
+	Long: `A utility that accepts an input json file and format and converts it to a destination json file and format.
 
-Cobra is a CLI library for Go that empowers applications.
-This application is a tool to generate the needed files
-to quickly create a Cobra application.`,
+  The formats can be the same (i.e. 5etools to 5etools) or different (i.e. 5etools to Encounter+).`,
 	// Uncomment the following line if your bare application
 	// has an action associated with it:
 	// Run: func(cmd *cobra.Command, args []string) { },
@@ -56,7 +53,7 @@ func init() {
 	// Cobra supports persistent flags, which, if defined here,
 	// will be global for your application.
 
-	// rootCmd.PersistentFlags().StringVar(&cfgFile, "config", "", "config file (default is $HOME/.r20toeplus.yaml)")
+	// rootCmd.PersistentFlags().StringVar(&cfgFile, "config", "", "config file (default is $HOME/.advconv.yaml)")
 
 	// Cobra also supports local flags, which will only run
 	// when this action is called directly.
